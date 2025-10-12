@@ -5,7 +5,7 @@ Users can submit data manually or upload a CSV file for batch processing.
 
 ---
 
-## 📌 Features
+## Features
 
 - **Manual Input**: Enter 11 feature values for real-time evaluation.
 - **CSV Upload**: Upload a CSV file with 11 columns for batch processing.
@@ -15,7 +15,7 @@ Users can submit data manually or upload a CSV file for batch processing.
 
 ---
 
-## 🛠️ Setup
+## Setup
 
 ### Prerequisites
 
@@ -53,7 +53,7 @@ Users can submit data manually or upload a CSV file for batch processing.
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 certificate-eval/
@@ -73,7 +73,7 @@ certificate-eval/
 
 ---
 
-## 🚀 Usage
+## Usage
 
 ### Web UI
 
@@ -109,13 +109,13 @@ certificate-eval/
 
 ---
 
-## 📖 API Documentation
+## API Documentation
 
 Visit [http://127.0.0.1:5000/docs](http://127.0.0.1:5000/docs) for detailed API documentation.
 
 ---
 
-## 🔧 Future Enhancements
+## Future Enhancements
 
 - Add user authentication.
 - Improve Model accuracy
@@ -128,6 +128,6 @@ Visit [http://127.0.0.1:5000/docs](http://127.0.0.1:5000/docs) for detailed API 
 
 ---
 
-## 📜 License
+## License
 
 This project is licensed under the MIT License.

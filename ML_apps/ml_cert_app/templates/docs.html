@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafafa;
+            margin: 40px;
+        }
+        h1 {
+            color: #333;
+        }
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .endpoint {
+            background: #fff;
+            border-left: 4px solid #0078D7;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>📘 API Documentation</h1>
+    <p>Welcome to the Certificate Submission API! Below are the available endpoints.</p>
+
+    <div class="endpoint">
+        <h2>POST /api/submit</h2>
+        <p><strong>Description:</strong> Submits certificate data for validation using the ML model.</p>
+        <p><strong>Request Headers:</strong></p>
+        <pre>
+Content-Type: application/json
+        </pre>
+
+        <p><strong>Request Body:</strong></p>
+        <pre>
+{
+  "data": [0.6, 0.8, 0.4]
+}
+        </pre>
+
+        <p><strong>Response:</strong></p>
+        <pre>
+{
+  "status": "success",
+  "prediction": "Pass",
+  "message": "Certificate processed: Pass"
+}
+        </pre>
+
+        <p><strong>Example PowerShell:</strong></p>
+        <pre>
+Invoke-WebRequest -Uri "http://127.0.0.1:5000/api/submit" `
+  -Method POST `
+  -Headers @{ "Content-Type" = "application/json" } `
+  -Body '{"data":[0.6,0.8,0.4]}'
+        </pre>
+
+        <p><strong>Example cURL:</strong></p>
+        <pre>
+curl -X POST http://127.0.0.1:5000/api/submit \
+     -H "Content-Type: application/json" \
+     -d '{"data":[0.6,0.8,0.4]}'
+        </pre>
+    </div>
+
+    <p>👨‍💻 Developed with ❤️ using Flask</p>
+</body>
+</html>

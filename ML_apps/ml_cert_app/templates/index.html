@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Evaluation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            width: 450px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h2 { text-align: center; margin-bottom: 20px; color: #333; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            width: 100%;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { background: #0056b3; }
+        input[type="file"] {
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        .result { margin-top: 20px; text-align: center; font-weight: bold; }
+        .progress-bar {
+            width: 100%;
+            height: 18px;
+            background: #eee;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .progress {
+            height: 100%;
+            width: 0;
+            background: #28a745;
+            transition: width 0.4s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Certificate Submission</h2>
+
+        <!-- Manual Entry Section -->
+        <form id="certificateForm">
+            <div id="manual-inputs"></div>
+            <button type="submit">Submit Single Certificate</button>
+        </form>
+
+        <hr style="margin: 20px 0;">
+
+        <!-- CSV Upload Section -->
+        <form id="csvForm" enctype="multipart/form-data">
+            <input type="file" id="csvFile" accept=".csv" required>
+            <button type="submit">Upload CSV</button>
+            <div class="progress-bar"><div class="progress" id="progress"></div></div>
+        </form>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        // Generate 11 inputs dynamically
+        const manualDiv = document.getElementById("manual-inputs");
+        for (let i = 1; i <= 11; i++) {
+            const input = document.createElement("input");
+            input.type = "number";
+            input.step = "any";
+            input.placeholder = "Feature " + i;
+            input.id = "f" + i;
+            input.required = true;
+            input.style.width = "48%";
+            input.style.margin = "1%";
+            manualDiv.appendChild(input);
+        }
+
+        // Handle single input submission
+        document.getElementById("certificateForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const values = [];
+            for (let i = 1; i <= 11; i++) values.push(parseFloat(document.getElementById("f"+i).value));
+
+            const res = await fetch("/api/submit", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({data: values})
+            });
+            const result = await res.json();
+            document.getElementById("result").innerText = "✅ Result: " + result.prediction;
+        });
+
+        // Handle CSV Upload
+        document.getElementById("csvForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const fileInput = document.getElementById("csvFile");
+            const file = fileInput.files[0];
+            if (!file) return alert("Please select a CSV file");
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const progress = document.getElementById("progress");
+            progress.style.width = "30%";
+
+            const response = await fetch("/upload_csv", {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) {
+                document.getElementById("result").innerText = "❌ Error uploading file.";
+                return;
+            }
+
+            progress.style.width = "100%";
+
+            // Convert blob to downloadable link
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "certificate_results.csv";
+            a.click();
+
+            document.getElementById("result").innerText = "✅ File processed and downloaded!";
+        });
+    </script>
+</body>
+</html>
